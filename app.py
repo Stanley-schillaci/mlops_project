@@ -24,6 +24,11 @@ def correct_text(input_text):
 def correct():
     try:
         data = request.get_json()
+        email = data.get('email', '')
+
+        # Vérifiez d'abord l'e-mail
+        if not is_valid_email(email):
+            return jsonify({"error": "Invalid email address"})
         
         # Vérifiez la présence du champ "string" dans la requête JSON
         if 'string' not in data:
@@ -36,11 +41,6 @@ def correct():
                 return jsonify({"error": f"Unexpected field '{field}' in the request JSON"})
         
         input_text = data['string']
-        email = data.get('email', '')
-
-        # Vérifiez d'abord l'e-mail
-        if not is_valid_email(email):
-            return jsonify({"error": "Invalid email address"})
 
         # Ensuite, effectuez la correction de texte
         corrected_text = correct_text(input_text)
