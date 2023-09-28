@@ -28,17 +28,17 @@ def correct():
 
         # Vérifiez d'abord l'e-mail
         if not is_valid_email(email):
-            return jsonify({"error": "Invalid email address"})
+            return jsonify({"error": "Invalid email address"}), 400  # Spécifiez le code d'erreur HTTP 400
         
         # Vérifiez la présence du champ "string" dans la requête JSON
         if 'string' not in data:
-            return jsonify({"error": "Missing 'string' field in the request JSON"})
+            return jsonify({"error": "Missing 'string' field in the request JSON"}), 400  # Spécifiez le code d'erreur HTTP 400
         
         # Vérifiez qu'il n'y a pas de champs supplémentaires dans la requête JSON
         allowed_fields = ['string', 'email']
         for field in data:
             if field not in allowed_fields:
-                return jsonify({"error": f"Unexpected field '{field}' in the request JSON"})
+                return jsonify({"error": f"Unexpected field '{field}' in the request JSON"}), 400  # Spécifiez le code d'erreur HTTP 400
         
         input_text = data['string']
 
@@ -47,7 +47,7 @@ def correct():
         response = {"corrected_string": corrected_text}
         return jsonify(response)
     except Exception as e:
-        return jsonify({"error": str(e)})
+        return jsonify({"error": str(e)}), 500  # Spécifiez le code d'erreur HTTP 500 pour les erreurs internes du serveur
 
 if __name__ == '__main__':
     app.run(debug=True)
